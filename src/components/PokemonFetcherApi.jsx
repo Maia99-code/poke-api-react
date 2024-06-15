@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import PokemonCount from "./PokemonCount";
 
 const PokemonFetcherApi = () => {
   const [pokemonNames, setPokemonNames] = useState([]);
   const [pokemonCount, setPokemonCount] = useState(0);
 
-  const fetchPokemon = async () => {
+  const fetchPokemon = async (limit) => {
     try {
-      let allPokemon = [];
-      let url = "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0";
+      let url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}`;
       let response = await fetch(url);
       let data = await response.json();
-      allPokemon = data.results;
+      let allPokemon = data.results;
 
       setPokemonNames(allPokemon.map((pokemon) => pokemon.name));
       setPokemonCount(allPokemon.length);
@@ -22,7 +21,8 @@ const PokemonFetcherApi = () => {
 
   return (
     <div>
-      <button onClick={fetchPokemon}>Fetch Pokemon</button>
+      <button onClick={() => fetchPokemon(807)}>Fetch First 807 Pokemon</button>
+      <button onClick={() => fetchPokemon(100000)}>Fetch All Pokemon</button>
       <PokemonCount pokemonCount={pokemonCount} />
       <ul>
         {pokemonNames.map((name, index) => (
